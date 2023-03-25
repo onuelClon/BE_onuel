@@ -2,16 +2,16 @@ const UserService = require('../services/user.service');
 
 class UsersController {
     constructor() {
-        this.userService = new UserService()
+        this.userService = new UserService();
     }
 
-    emailCheck = async (req,res,next) => {
+    emailCheck = async (req, res, next) => {
         try {
-            const { emailNum } = req.params
+            const { emailNum } = req.params;
             console.log(emailNum);
             // emailToken 으로 넣었는데 왜 소문자가 들어가있을까?
             const { emailtoken } = req.headers;
-            
+
             const result = await this.userService.emailCheck({
                 emailtoken,
                 emailNum,
@@ -24,7 +24,7 @@ class UsersController {
     validateEmail = async (req, res, next) => {
         try {
             const { userEmail } = req.body;
-            console.log(userEmail)
+            console.log(userEmail);
             const result = await this.userService.sendMail({
                 userEmail,
             });

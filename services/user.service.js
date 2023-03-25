@@ -10,7 +10,7 @@ class UserService {
     }
     sendMail = async ({ userEmail }) => {
         const randomNumber = Math.floor(Math.random() * 999999);
-        console.log(randomNumber, typeof (randomNumber));
+        console.log(randomNumber, typeof randomNumber);
         const emailToken = jwt.sign(
             {
                 randomNumber: randomNumber.toString(),
@@ -60,6 +60,7 @@ class UserService {
             } else {
                 console.log('===================send ok========================' + info.response);
             }
+            return;
         });
 
         return { emailToken, message: '입력한 이메일로 인증메일이 발송되었습니다.' };
@@ -67,24 +68,23 @@ class UserService {
 
     emailCheck = async ({ emailtoken, emailNum }) => {
         try {
-            console.log('토큰', emailtoken, emailNum, typeof (emailNum));
+            console.log('토큰', emailtoken, emailNum, typeof emailNum);
             const [authType, authToken] = (emailtoken ?? '').split(' ');
-    
-            if(!emailtoken||authType!=='Bearer'||  !authToken){
-                throw new CustomError('인증되지 않았습니다', 401);
 
+            if (!emailtoken || authType !== 'Bearer' || !authToken) {
+                throw new CustomError('인증되지 않았습니다', 401);
             }
-            const { randomNumber} = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
+            const { randomNumber } = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
             console.log(randomNumber);
             const validateInfo = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
             if (validateInfo.randomNumber !== emailNum) {
                 throw new CustomError('인증코드가 일치하지 않습니다.', 419);
             }
-            console.log(validateInfo)
+            console.log(validateInfo);
         } catch (err) {
             throw new CustomError('인증가능 시간이 만료되었습니다.', 419);
         }
-        
+
         return { message: '이메일 인증에 성공하였습니다' };
     };
 

@@ -4,9 +4,9 @@ const CustomError = require('./errorhandler');
 
 module.exports = async (req, res, next) => {
     try {
-        const { Authorization } = req.headers;
-        const [authType, authToken] = (Authorization ?? '').split(' ');
-        if (!Authorization) {
+        const { authorization } = req.headers;
+        const [authType, authToken] = (authorization ?? '').split(' ');
+        if (!authorization) {
             throw new CustomError('인증되지 않았습니다', 401);
         }
         if (authType !== 'Bearer' || !authToken) {

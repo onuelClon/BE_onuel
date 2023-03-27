@@ -4,13 +4,11 @@ class UsersController {
     constructor() {
         this.userService = new UserService();
     }
-    test = async(req,res,next) => {
-
-
-        const { nickname, userId } = res.locals.user
-        console.log(nickname, userId )
-        res.json({message:"미들웨어 테스트용 API 입니다"})
-    }
+    test = async (req, res, next) => {
+        const { nickname, userId } = res.locals.user;
+        console.log(nickname, userId);
+        res.json({ message: '미들웨어 테스트용 API 입니다' });
+    };
     emailCheck = async (req, res, next) => {
         try {
             const { emailNum } = req.params;

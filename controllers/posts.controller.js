@@ -100,16 +100,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 const PostService = require('../services/posts.services');
 
-
 const express = require('express');
 const router = express.Router();
 const { Posts } = require('../models');
 
-
-
 class PostsController {
-
-  postService = new PostService();
+    postService = new PostService();
 
     Test = async (req, res, next) => {
         console.log('컨트롤러 위치입니다');
@@ -117,16 +113,12 @@ class PostsController {
         res.status(200).json({ data: posts });
     };
 
-
-    Posts = async(req,res,next)=> { 
-      console.log('post 컨트롤러 위치입니다');
-      const {size,style,lifeType,viewCount}= req.body
-      const posts = await this.postService.createPost({size,style,lifeType,viewCount});
-      res.status(200).json({ data: posts });
+    Posts = async (req, res, next) => {
+        console.log('post 컨트롤러 위치입니다');
+        const { size, style, lifeType, viewCount } = req.body;
+        const posts = await this.postService.createPost({ size, style, lifeType, viewCount });
+        res.status(200).json({ data: posts });
     };
-   
-    
-
 }
 
 module.exports = PostsController;

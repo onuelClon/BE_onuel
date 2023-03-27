@@ -5,9 +5,9 @@ const CustomError = require('./errorhandler');
 module.exports = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
-        console.log(authorization)
+        console.log(authorization);
         const [authType, authToken] = (authorization ?? '').split(' ');
-        console.log(authType, authToken)
+        console.log(authType, authToken);
         if (!authorization) {
             throw new CustomError('인증되지 않았습니다', 401);
         }
@@ -15,8 +15,8 @@ module.exports = async (req, res, next) => {
             throw new CustomError('로그인 후 사용가능한 기능입니다.', 401);
         }
         const { nickname, userEmail } = jwt.verify(authToken, process.env.TOKEN_KEY);
-        console.log("여기용료",nickname, userEmail)
-        let user = await Users.findOne({ where: { userId : userEmail} });
+        console.log('여기용료', nickname, userEmail);
+        let user = await Users.findOne({ where: { userId: userEmail } });
         res.locals.user = user;
         next();
     } catch (err) {

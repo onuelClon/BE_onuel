@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger/swagger-output.json');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -24,7 +26,7 @@ app.use(
         optionsSuccessStatus: 200,
     })
 );
-
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));

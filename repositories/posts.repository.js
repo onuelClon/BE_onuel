@@ -36,8 +36,8 @@ class PostRepository {
         return user;
     };
 
-    createPost = async ({size,style,lifeType,viewCount}) => {
-        const makePost = await Posts.create({size,style,lifeType,viewCount});
+    createPost = async ({ size, style, lifeType, viewCount }) => {
+        const makePost = await Posts.create({ size, style, lifeType, viewCount });
         return makePost;
     };
 }

@@ -65,23 +65,19 @@ const PostRepository = require('../repositories/posts.repository');
 // const router = express.Router();
 // const { Posts } = require('../models');
 
-
-
-
 class PostService {
     postRepository = new PostRepository();
 
     testfindAllPost = async () => {
-      console.log("서비스 위치입니다");
-      const allPost = await this.postRepository.testfindAllPost(); 
-      return allPost;
+        console.log('서비스 위치입니다');
+        const allPost = await this.postRepository.testfindAllPost();
+        return allPost;
     };
 
     //게시물 생성
-    createPost = async({size,style,lifeType,viewCount}) =>{
-        const value = await this.postRepository.createPost({size,style,lifeType,viewCount});
+    createPost = async ({ size, style, lifeType, viewCount }) => {
+        const value = await this.postRepository.createPost({ size, style, lifeType, viewCount });
         return value;
-    }
-
+    };
 }
 module.exports = PostService;

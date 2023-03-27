@@ -2,11 +2,30 @@ const CustomError = require('../middleware/errorhandler');
 const Joi = require('joi');
 const CommentService = require('../services/comments.service');
 
-// const RE_COMMENT = /^[\s\S]{1,100}$/; 댓글 정규 표현식
-
 const commentSchema = Joi.object({
-    comment: Joi.string().required(),
-});
+    comment: Joi.string()
+      .min(1)
+      .max(200)
+      .required()
+      .messages({
+        "string.base": "이 필드는 문자열로 이루어져야 합니다.",
+        "string.empty": "이 필드는 비어 있을 수 없습니다.",
+        "string.min": "이 필드는 최소 {{#limit}} 문자 이상이어야 합니다.",
+        "string.max": "이 필드는 최대 {{#limit}} 문자 이하여야 합니다.",
+        "any.required": "이 필드는 필수입니다.",
+      }),
+  });
+  
+const options = {
+abortEarly: false,
+messages: {
+    "string.base": "이 필드는 문자열로 이루어져야 합니다.",
+    "string.empty": "이 필드는 비어 있을 수 없습니다.",
+    "string.min": "이 필드는 최소 {{#limit}} 문자 이상이어야 합니다.",
+    "string.max": "이 필드는 최대 {{#limit}} 문자 이하여야 합니다.",
+    "any.required": "이 필드는 필수입니다.",
+}
+};
 
 class CommentsController {
     commentService = new CommentService();
@@ -27,10 +46,12 @@ class CommentsController {
     // 댓글 생성
     createComment = async (req, res, next) => {
         try {
-            const resultSchema = commentSchema.validate(req.body);
-            if (resultSchema.error) {
-                throw new CustomError('데이터 형식이 올바르지 않습니다', 400);
-            }
+            try {
+                await commentSchema.validateAsync(req.body, options);
+              } catch (error) {
+                const customError = new CustomError(error.details[0].message, 400);
+                throw customError;
+              }
             const { postId } = req.params;
             const { userId } = res.locals.user;
             const { comment } = req.body;
@@ -38,7 +59,9 @@ class CommentsController {
             res.status(200).json({ message: '댓글을 작성하였습니다.' });
         } catch (err) {
             return res.status(err.status || 500).json({
-                errorMessage: err.expect ? err.message : '댓글 작성에 실패하였습니다.',
+                errorMessage: err.expect
+                    ? err.message
+                    : "댓글 작성에 실패하였습니다.",
             });
         }
     };
@@ -46,10 +69,12 @@ class CommentsController {
     // 댓글 수정
     updateComment = async (req, res, next) => {
         try {
-            const resultSchema = commentSchema.validate(req.body);
-            if (resultSchema.error) {
-                throw new CustomError('데이터 형식이 올바르지 않습니다', 400);
-            }
+            try {
+                await commentSchema.validateAsync(req.body, options);
+              } catch (error) {
+                const customError = new CustomError(error.details[0].message, 400);
+                throw customError;
+              }
             const { comment } = req.body;
             const { userId } = res.locals.user;
             const { postId, commentId } = req.params;

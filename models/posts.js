@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
                 sourceKey: 'postId',
                 foreignKey: 'postId',
             });
+
+            this.hasMany(models.Boards, {
+                sourceKey: 'postId',
+                foreignKey: 'postId',
+            });
         }
     }
     Posts.init(

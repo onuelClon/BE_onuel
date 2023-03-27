@@ -1,10 +1,10 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
+const authMiddleware = require('../middleware/auth-middleware');
 
-// // const authMiddleware = require('../middleware/auth-middleware');
-// const LikesController = require('../controllers/likes.controller');
-// const likesController = new LikesController();
+const LikesController = require('../controllers/likes.controller');
+const likesController = new LikesController();
 
-// router.put("/posts/:postId/like", likesController.updateLike)
+router.put("/posts/:postId/like", authMiddleware, likesController.updateLike)
 
-// module.exports = router;
+module.exports = router;

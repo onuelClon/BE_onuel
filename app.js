@@ -4,7 +4,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const app = express();
-const port = 5004;
+const port = 5000;
 const globalRouter = require('./routes');
 const { sequelize } = require('./models');
 

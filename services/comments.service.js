@@ -24,8 +24,8 @@ class CommentService {
         const findComment = await this.commentRepository.findCommentById(commentId);
         if (!findPost) throw new CustomError("게시글이 존재하지 않습니다.", 400);
         if (!findComment) throw new CustomError("댓글이 존재하지 않습니다.", 400 );
-        if (findComment.userId!=userId) throw new CustomError("댓글의 수정 권한이 존재하지 않습니다.", 401)
-
+        if (findComment.userId!==userId) throw new CustomError("댓글의 수정 권한이 존재하지 않습니다.", 401)
+        
         await this.commentRepository.updateComment(commentId, userId, comment)
     }
 
@@ -34,7 +34,7 @@ class CommentService {
         const findComment = await this.commentRepository.findCommentById(commentId);
         if (!findPost) throw new CustomError("게시글이 존재하지 않습니다.", 400);
         if (!findComment) throw new CustomError("댓글이 존재하지 않습니다.", 400);
-        if (findComment.userId!==userId) throw new CustomError("댓글의 수정 권한이 존재하지 않습니다.", 401)
+        if (findComment.userId!==userId) throw new CustomError("댓글의 삭제 권한이 존재하지 않습니다.", 401)
 
         await this.commentRepository.deleteComment(commentId, userId)
     }

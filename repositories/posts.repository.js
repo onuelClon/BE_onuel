@@ -103,7 +103,7 @@ class PostRepository {
 
     //게시글 일부조회
     findByPostId = async (postId) => {
-        const findOne = await Posts.findOne({
+        let findOne = await Posts.findOne({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount'],
             include: [
                 {
@@ -126,27 +126,21 @@ class PostRepository {
             where: {
                 postId: postId,
             },
-        });
-        // const value2 = { 
-        //     postId : findOne.postId,
+        }); 
 
-        //     nickname : findOne.User.nickname,
-        //     style : findOne.style,
-        //     lifeType : findOne.lifeType,
-        //     likesCount : "like카운트 불러올 자리",
-        //     commentCount : "commentCount 불러올 자리",
-        //     viewCount : "viewCount 불터올자리",
-        //     Boards: findOne.Boards.map((board) => ({
-        //         img: board.img,
-        //         space: board.space,
-        //         content: board.content,
-        //     })),
-        // }
+        // let viewCount = findOne.viewCount;
+        // viewCount++;
+        // findOne.update({viewCount});
 
-
-        // return value2;
-        // return await Posts.findOne({ where: { postId: postId } });
-        // const findOne = await Posts.findOne({where : {postId : postId}});
+        // console.log(findOne.viewCount);
+        // let viewCount = findOne.viewCount; 
+        // viewCount + 1;
+        // console.log(findOne.viewCount);
+        //  findOne = await findOne.update(
+        //     {
+        //         viewCount,
+        //     },
+        // );
         return findOne;
     };
 

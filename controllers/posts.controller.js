@@ -1,6 +1,10 @@
 const PostService = require('../services/posts.services');
 const express = require('express');
 
+//트랙젝션 사용
+const { Posts, sequelize } = require('../models');
+const { Transaction } = require('sequelize');
+
 class PostsController {
     postService = new PostService();
     /*
@@ -14,30 +18,42 @@ class PostsController {
         res.status(200).json({ data: posts });
     };
     //////////////////////////////////////////////////////////////////////////////
-    
+
     //게시물 생성
     Posts = async (req, res, next) => {
         try {
-            const { userId ,nickname} = res.locals.user;
-            const { size, style, lifeType, img, space, content, tags } = req.body;
-            console.log("=========================================");
-            console.log(size);
-            //입력값 확인
-            //[size, style, lifeType, space, content,  ] [tags, viewCount ,img]
-            // const checkInputValue = await this.postService.checkInput({size, style, lifeType, space, content});
-            //img 확인
-            //tag형식확인
-               //  console.log("tag배열의 값은 ");
-            //  console.log(tagsArr);
-        
-            //  if(tagsArr[2] =="tag2") {
-            //     console.log("같습니다");
-            //  } else {
-            //     console.log("다릅니다");
-            //  }
+            const { userId, nickname } = res.locals.user;
+            // const {size, style, lifeType, img, space, content, tags } = req.body;
+            const { size, style, lifeType, boards } = req.body;
+            console.log(boards[1].content);
+            console.log(boards.length);
+
             
-             const tagsArr = await this.postService.checkTag({tags});
-         
+            //게시물생성
+            const posts = await this.postService.postCreate({
+                userId,
+                nickname,
+                size,
+                style,
+                lifeType,
+                // viewCount,
+            });
+
+            const postId = posts.postId;
+
+            let TotalBoards = [];
+            for (let i = 0; i < boards.length; i++) {
+                TotalBoards[i] = await this.postService.boardCreate({
+                    postId,
+                    img :boards[i].img,
+                    space : boards[i].space,
+                    content :boards[i].content,
+                    tags : boards[i].tags,
+                }); 
+            }
+            res.status(201).json({ "message": "계시글 작성 성공하였습니다."});
+            /*
+            const tagsArr = await this.postService.checkTag({tags});
 
             //게시물생성
             const posts = await this.postService.postCreate({
@@ -59,8 +75,7 @@ class PostsController {
                 content,
                 tags
             });
-            // console.log("tag는 잘 넘어올까?");
-            // console.log(boards);
+      
 
             const value = {
                 userId,
@@ -73,17 +88,17 @@ class PostsController {
                 boards,
             };
 
-            // res.status(201).json({ "message": "계시글 작성 성공하였습니다."});
-            res.status(200).json({ posts: value });
+            res.status(201).json({ "message": "계시글 작성 성공하였습니다."});
+            res.status(200).json({ posts: value });*/
         } catch (err) {
             next(err);
         }
     };
 
+
     //★메인 게시믈 전체조회
     Main = async (req, res, next) => {
         try {
-            
             const posts = await this.postService.postFindall();
             res.status(200).json({ posts: posts });
         } catch (err) {
@@ -157,5 +172,4 @@ class PostsController {
     // -게시글 생성		postCreate
     // -게시글 수정		postPatch
 }
-
 module.exports = PostsController;

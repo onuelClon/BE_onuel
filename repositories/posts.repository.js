@@ -1,4 +1,4 @@
-const { Posts, Users, Boards, Comments } = require('../models');
+const { Posts, Users, Boards, Comments,Likes } = require('../models');
 
 class PostRepository {
     /*
@@ -73,6 +73,10 @@ class PostRepository {
                     model: Comments,
                     attributes: ['comment'],
                 },
+                {
+                    model: Likes,
+                    attributes: ['userId'],
+                },
             ],
         });
 
@@ -114,12 +118,15 @@ class PostRepository {
                     model: Comments,
                     attributes: ['comment'],
                 },
+                {
+                    model: Likes,
+                    attributes: ['userId'],
+                },
             ],
             where: {
                 postId: postId,
             },
         });
-
         // const value2 = { 
         //     postId : findOne.postId,
 

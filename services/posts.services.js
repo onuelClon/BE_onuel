@@ -109,22 +109,6 @@ class PostService {
     postFindall = async () => {
         const value = await this.postRepository.findByPost();
 
-        // /////////comment카운터 해보기
-        // const commentCount = await Comments.findAll({
-        //     attributes: ['comment'],
-        //     where: {postId : 77},
-        // });
-
-        // console.log('comment결과값입니다~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-        // console.log(commentCount.length);
-
-        //   /////////comment카운터 해보기
-        //   const commentCount = await Comments.findAll({
-        //     attributes: ['comment'],
-        //     where: {
-        //         [Op.and]: [{ postId : Posts.postId } /*, { userId }, { commentId } */],
-        //     },
-        // });
 
        
         const result = value.map((post) => {
@@ -134,8 +118,7 @@ class PostService {
                 postId: post.postId,
                 nickname: User.nickname,
                 size: post.size,
-                // comment : Comments.comment,
-                comment: Boards,
+                comment: Comments.length > 0 ? Comments[0].comment : null,
                 likesCount: Likes.length,
                 commentCount: Comments.length,
                 Boards: Boards.map((board) => ({

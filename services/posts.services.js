@@ -1,6 +1,6 @@
 const PostRepository = require('../repositories/posts.repository');
 const CustomError = require('../middleware/errorhandler');
-const { Posts, Users, Boards, Comments } = require('../models');
+const { Posts, Users, Boards, Comments ,Likes} = require('../models');
 
 class PostService {
     postRepository = new PostRepository();
@@ -128,15 +128,15 @@ class PostService {
 
        
         const result = value.map((post) => {
-            const { Boards, User, Comments, ...rest } = post;
+            const { Boards, User, Comments,Likes, ...rest } = post;
 
             return {
                 postId: post.postId,
                 nickname: User.nickname,
                 size: post.size,
                 // comment : Comments.comment,
-                comment: 'comment를 불러올 자리',
-                likesCount: 'like카운트 불러올 자리',
+                comment: Boards,
+                likesCount: Likes.length,
                 commentCount: Comments.length,
                 Boards: Boards.map((board) => ({
                     img: board.img,
@@ -152,16 +152,21 @@ class PostService {
     // -게시글 일부조회 	postFindone
     postFindone = async (postId) => {
         const value = await this.postRepository.findByPostId(postId);
+    
+        let viewCount = value.viewCount;
+        viewCount++;
+        value.update(
+            {viewCount}
+        )
 
         const value2 = {
             postId: value.postId,
-
             nickname: value.User.nickname,
             style: value.style,
             lifeType: value.lifeType,
-            likesCount: 'like카운트 불러올 자리',
-            commentCount: 'commentCount 불러올 자리',
-            viewCount: 'viewCount 불터올자리',
+            likesCount: value.Likes.length,
+            commentCount: value.Comments.length,
+            viewCount: viewCount,
             Boards: value.Boards.map((board) => ({
                 img: board.img,
                 space: board.space,

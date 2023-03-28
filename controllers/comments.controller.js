@@ -48,8 +48,8 @@ class CommentsController {
                 const customError = new CustomError(error.details[0].message, 400);
                 throw customError;
             }
-            // const { postId } = req.params;
-            // const { userId } = res.locals.user;
+            const { postId } = req.params;
+            const { userId } = res.locals.user;
             const { comment } = req.body;
             console.log("============",comment)
             await this.commentService.createComment(postId, userId, comment);

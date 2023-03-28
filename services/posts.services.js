@@ -135,7 +135,7 @@ class PostService {
                 nickname: User.nickname,
                 size: post.size,
                 // comment : Comments.comment,
-                comment: 'comment를 불러올 자리',
+                comment: Boards,
                 likesCount: Likes.length,
                 commentCount: Comments.length,
                 Boards: Boards.map((board) => ({
@@ -152,8 +152,12 @@ class PostService {
     // -게시글 일부조회 	postFindone
     postFindone = async (postId) => {
         const value = await this.postRepository.findByPostId(postId);
-
-        let viewTotalCount = value.viewCount;
+    
+        let viewCount = value.viewCount;
+        viewCount++;
+        value.update(
+            {viewCount}
+        )
 
         const value2 = {
             postId: value.postId,
@@ -162,7 +166,7 @@ class PostService {
             lifeType: value.lifeType,
             likesCount: value.Likes.length,
             commentCount: value.Comments.length,
-            viewCount: viewTotalCount++,
+            viewCount: viewCount,
             Boards: value.Boards.map((board) => ({
                 img: board.img,
                 space: board.space,

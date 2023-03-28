@@ -20,7 +20,8 @@ class PostsController {
         try {
             const { userId ,nickname} = res.locals.user;
             const { size, style, lifeType, img, space, content, tags } = req.body;
-
+            console.log("=========================================");
+            console.log(size);
             //입력값 확인
             //[size, style, lifeType, space, content,  ] [tags, viewCount ,img]
             // const checkInputValue = await this.postService.checkInput({size, style, lifeType, space, content});

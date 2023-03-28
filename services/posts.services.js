@@ -21,13 +21,12 @@ class PostService {
 
     // -tag를 형식			checkTag
     checkTag = async ({ tags }) => {
-        console.log(tags)
-        // const resultEmpty = tags.indexOf(' ');
-        // const resultDouble = tags.indexOf('##');
-
-        // if (resultEmpty != -1 || resultDouble != -1) {
-        //     throw new CustomError(' ㄴ tag형식이 올바르지 않습니다.(공백 , #내용미입력)');
-        // }
+        const resultEmpty = tags.indexOf(' ');
+        const resultDouble = tags.indexOf('##');
+   
+        if (resultEmpty != -1 || resultDouble != -1) {
+            throw new CustomError(' ㄴ tag형식이 올바르지 않습니다.(공백 , #내용미입력)');
+        }
         const result = tags.indexOf('#');
 
         if (result === -1) {
@@ -44,8 +43,8 @@ class PostService {
             tagArr[count] = oneValue;
             count++;
         }
-        console.log('=============================');
-        console.log('tag배열은 = ', tagArr);
+        console.log("=============================");
+        console.log("tag배열은 = " , tagArr);
         return tagArr;
     };
 
@@ -127,6 +126,7 @@ class PostService {
         //     },
         // });
 
+       
         const result = value.map((post) => {
             const { Boards, User, Comments, ...rest } = post;
 

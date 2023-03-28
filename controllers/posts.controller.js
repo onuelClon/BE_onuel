@@ -18,9 +18,9 @@ class PostsController {
     //게시물 생성
     Posts = async (req, res, next) => {
         try {
-            const { userId, nickname } = res.locals.user;
             const { size, style, lifeType, img, space, content, tags } = req.body;
-            console.log(size, style, lifeType)
+            console.log(size, style, lifeType);
+            const { userId, nickname } = res.locals.user;
             //입력값 확인
             //[size, style, lifeType, space, content,  ] [tags, viewCount ,img]
             // const checkInputValue = await this.postService.checkInput({size, style, lifeType, space, content});
@@ -109,6 +109,7 @@ class PostsController {
         try {
             const { postId } = req.params;
             const { size, style, lifeType } = req.body;
+            console.log(size,style,lifeType)
             //postid존재여부
             await this.postService.findByPostId(postId);
             //입력값 확인

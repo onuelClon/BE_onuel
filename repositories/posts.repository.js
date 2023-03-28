@@ -54,7 +54,7 @@ class PostRepository {
 
         return makeBoards;
     };
-    
+
     //게시물 전체 조회
     findByPost = async () => {
         const findAll = await Posts.findAll({
@@ -120,7 +120,7 @@ class PostRepository {
             },
         });
 
-        // const value2 = { 
+        // const value2 = {
         //     postId : findOne.postId,
 
         //     nickname : findOne.User.nickname,
@@ -135,7 +135,6 @@ class PostRepository {
         //         content: board.content,
         //     })),
         // }
-
 
         // return value2;
         // return await Posts.findOne({ where: { postId: postId } });

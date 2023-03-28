@@ -32,7 +32,7 @@ class UsersController {
             const result = await this.userService.sendMail({
                 userEmail,
             });
-            res.set({ emailToken: `Bearer ${result.emailToken}` });
+            res.set('emailToken', `Bearer ${result.emailToken}`);
             res.json({ message: result.message });
         } catch (err) {
             next(err);
@@ -45,8 +45,9 @@ class UsersController {
                 userEmail,
                 password,
             });
-            res.set({ authorization: `Bearer ${result.token}` });
-            res.status(201).json({ token: result.token, message: result.message });
+
+            res.set('authorization', `Bearer ${result.token}`);
+            res.status(201).json({ token: `Bearer ${result.token}`, message: result.message });
         } catch (err) {
             next(err);
         }

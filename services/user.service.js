@@ -11,9 +11,13 @@ class UserService {
     sendMail = async ({ userEmail }) => {
         const randomNumber = Math.floor(Math.random() * 999999);
         console.log(randomNumber, typeof randomNumber);
+        const salt = await bcrypt.genSalt();
+        const encryptRandomNumber = await bcrypt.hash(randomNumber.toString(), salt);
+        console.log(encryptRandomNumber);
+
         const emailToken = jwt.sign(
             {
-                randomNumber: randomNumber.toString(),
+                randomNumber: encryptRandomNumber,
             },
             process.env.EMAIL_JWT_KEY,
             {
@@ -76,8 +80,12 @@ class UserService {
             }
             const { randomNumber } = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
             console.log(randomNumber);
+
+            // 암호화된 인증번호 비교
+            const checkNumber = await bcrypt.compare(emailNum, randomNumber);
+
             const validateInfo = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
-            if (validateInfo.randomNumber !== emailNum) {
+            if (!checkNumber) {
                 throw new CustomError('인증코드가 일치하지 않습니다.', 419);
             }
             console.log(validateInfo);

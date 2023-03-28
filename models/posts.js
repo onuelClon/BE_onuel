@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             this.hasMany(models.Comments, {
                 sourceKey: 'postId',
                 foreignKey: 'postId',
-            }); 
+            });
             this.hasMany(models.Boards, {
                 sourceKey: 'postId',
                 foreignKey: 'postId',

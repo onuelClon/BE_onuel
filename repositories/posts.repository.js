@@ -65,7 +65,7 @@ class PostRepository {
             include: [
                 {
                     model: Boards,
-                    attributes: ['img', 'space', 'content'],
+                    attributes: ['img', 'space', 'content','tags'],
                 },
                 {
                     model: Users, 

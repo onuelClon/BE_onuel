@@ -73,7 +73,7 @@ class PostService {
         return;
     };
 
-    // -게시글 생성		postCreate
+    //게시글 생성
     postCreate = async ({ userId, nickname, size, style, lifeType }) => {
         const value = await this.postRepository.createPost({
             userId,
@@ -183,6 +183,7 @@ class PostService {
                 img: board.img,
                 space: board.space,
                 content: board.content,
+                tags : board.tags
             })),
         };
 

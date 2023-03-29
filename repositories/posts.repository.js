@@ -2,6 +2,7 @@ const { Posts, Users, Boards, Comments,Likes } = require('../models');
 
 class PostRepository {
     
+    //post제작
     createPost = async ({ userId, nickname, size, style, lifeType }) => {
         console.log(nickname);
         const makePost = await Posts.create({
@@ -15,6 +16,7 @@ class PostRepository {
         return makePost;
     };
 
+    //board제작
     createBoard = async ({ postId, img, space, content, tags }) => {
         const makeBoards = await Boards.create({
             postId,
@@ -31,15 +33,14 @@ class PostRepository {
     findByPost = async () => {
 
         const findAll = await Posts.findAll({
-            // raw: true,
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount','createdAt'],
             include: [
                 {
-                    model: Boards, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Boards, 
                     attributes: ['img', 'space', 'content'],
                 },
                 {
-                    model: Users, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Users, 
                     attributes: ['nickname'],
                 },
                 {
@@ -58,15 +59,16 @@ class PostRepository {
 
     //게시글 일부조회
     findByPostId = async (postId) => {
+
         let findOne = await Posts.findOne({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount'],
             include: [
                 {
-                    model: Boards, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Boards,
                     attributes: ['img', 'space', 'content'],
                 },
                 {
-                    model: Users, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Users, 
                     attributes: ['nickname'],
                 },
                 {
@@ -93,11 +95,11 @@ class PostRepository {
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount', 'createdAt'],
             include: [
                 {
-                    model: Boards, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Boards,
                     attributes: ['img', 'space', 'content'],
                 },
                 {
-                    model: Users, //관계를 맺고있는 테이블을 조회합니다.
+                    model: Users, 
                     attributes: ['nickname'],
                 },
                 {
@@ -120,11 +122,11 @@ class PostRepository {
         return deletePost;
     };
 
-    patchPost = async (postId, size) => {
+    patchPost = async (postId,size, style, lifeType, img, space, content, tags ) => {
         console.log('레파지토리');
         const postpatch = await Posts.update(
             {
-                size,
+                size,style, lifeType, img, space, content, tags
             },
             {
                 where: { postId },

@@ -65,9 +65,8 @@ app.listen(port, () => {
 //       region: REGION,
 //     });
 
-    
-//     // 파일과 파일이름을 넘겨주면 됩니다. 
-//     // 이 함수를 input에 세팅 -> 
+//     // 파일과 파일이름을 넘겨주면 됩니다.
+//     // 이 함수를 input에 세팅 ->
 //     // 완료 후 아래 파일 가져와서 s3에다 업로드를 하는 라인
 //     const file = e.target.files[0];
 //     console.log(file);
@@ -78,7 +77,7 @@ app.listen(port, () => {
 //       Bucket: S3_BUCKET,
 //       Key: file.name
 //     };
-    
+
 //     //putObject를 통해 parms를 주면 alert으로 Success 알람
 //     myBucket.putObject(params)
 //       .on('httpUploadProgress', (evt) => {
@@ -87,11 +86,11 @@ app.listen(port, () => {
 //       .send((err) => {
 //         if (err) console.log(err)
 //       })
-//   } 
+//   }
 
-//   return { 
+//   return {
 //     <div className="App">
 //     <input type={"file"} onChange={onFileUpload} />
 //     </div>
 //   }
-  ////////////////////////////////
+////////////////////////////////

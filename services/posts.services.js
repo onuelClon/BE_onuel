@@ -1,6 +1,6 @@
 const PostRepository = require('../repositories/posts.repository');
 const CustomError = require('../middleware/errorhandler');
-const { Posts, Users, Boards, Comments ,Likes} = require('../models');
+const { Posts, Users, Boards, Comments, Likes } = require('../models');
 
 class PostService {
     postRepository = new PostRepository();
@@ -14,7 +14,7 @@ class PostService {
     checkTag = async ({ tags }) => {
         const resultEmpty = tags.indexOf(' ');
         const resultDouble = tags.indexOf('##');
-   
+
         if (resultEmpty != -1 || resultDouble != -1) {
             throw new CustomError(' ㄴ tag형식이 올바르지 않습니다.(공백 , #내용미입력)');
         }
@@ -34,8 +34,8 @@ class PostService {
             tagArr[count] = oneValue;
             count++;
         }
-        console.log("=============================");
-        console.log("tag배열은 = " , tagArr);
+        console.log('=============================');
+        console.log('tag배열은 = ', tagArr);
         return tagArr;
     };
 
@@ -97,43 +97,41 @@ class PostService {
         return value;
     };
 
-
     //찾은 값의 순서를 정렬
-    postSort = async (title,posts) =>{ 
+    postSort = async (title, posts) => {
         switch (title) {
-            case "likesCount":
+            case 'likesCount':
                 posts = posts.sort((a, b) => {
                     return b.likesCount - a.likesCount;
                 });
                 break;
 
-            case "commentCount":
+            case 'commentCount':
                 posts = posts.sort((a, b) => {
                     return b.commentCount - a.commentCount;
                 });
                 break;
 
-            case "createAt": posts = posts.sort((a, b) => {
-                return b.createAt - a.createAt;
-            });
-            break;
+            case 'createAt':
+                posts = posts.sort((a, b) => {
+                    return b.createAt - a.createAt;
+                });
+                break;
 
-            default : posts = posts.sort((a, b) => {
-                return a.postId - b.postId;
-            });
+            default:
+                posts = posts.sort((a, b) => {
+                    return a.postId - b.postId;
+                });
         }
-        return posts
+        return posts;
     };
-
-
 
     // -게시글 전체조회
     postFindall = async () => {
         const value = await this.postRepository.findByPost();
 
         let result = value.map((post) => {
-
-            const { Boards, User, Comments,Likes, ...rest } = post;
+            const { Boards, User, Comments, Likes, ...rest } = post;
 
             // let date = post.createAt;
             // let formattedDate = date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' }).replace(',', '').replace(/\//g, '-').replace(' ', '/');
@@ -146,8 +144,8 @@ class PostService {
                 likesCount: Likes.length,
                 commentCount: Comments.length,
                 lifeType: post.lifeType,
-                createAt : post.createdAt,
-                Boards: Boards.map((board) => ({
+                createAt: post.createdAt,
+                boards: Boards.map((board) => ({
                     img: board.img,
                     space: board.space,
                     content: board.content,
@@ -157,19 +155,13 @@ class PostService {
         return result;
     };
 
-
-   
-
-
     // -게시글 일부조회 	postFindone
     postFindone = async (postId) => {
         const value = await this.postRepository.findByPostId(postId);
-    
+
         let viewCount = value.viewCount;
         viewCount++;
-        value.update(
-            {viewCount}
-        )
+        value.update({ viewCount });
 
         const value2 = {
             postId: value.postId,
@@ -179,7 +171,7 @@ class PostService {
             likesCount: value.Likes.length,
             commentCount: value.Comments.length,
             viewCount: viewCount,
-            Boards: value.Boards.map((board) => ({
+            boards: value.Boards.map((board) => ({
                 img: board.img,
                 space: board.space,
                 content: board.content,
@@ -190,12 +182,11 @@ class PostService {
     };
 
     //where문이 포함된 전체 내용 찾기
-    postWhereFindall = async (lifeType) => { 
-        const value = await this.postRepository.postWhereFindall(lifeType)  
-  
-        let result = value.map((post) => {
+    postWhereFindall = async (lifeType) => {
+        const value = await this.postRepository.postWhereFindall(lifeType);
 
-            const { Boards, User, Comments,Likes, ...rest } = post;
+        let result = value.map((post) => {
+            const { Boards, User, Comments, Likes, ...rest } = post;
 
             // let date = post.createAt;
             // let formattedDate = date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' }).replace(',', '').replace(/\//g, '-').replace(' ', '/');
@@ -208,8 +199,8 @@ class PostService {
                 likesCount: Likes.length,
                 commentCount: Comments.length,
                 lifeType: post.lifeType,
-                createAt : post.createdAt,
-                Boards: Boards.map((board) => ({
+                createAt: post.createdAt,
+                boards: Boards.map((board) => ({
                     img: board.img,
                     space: board.space,
                     content: board.content,
@@ -217,13 +208,20 @@ class PostService {
             };
         });
         return result;
-
-    }
-
+    };
 
     // -게시글 수정		postPatch
-    postPatch = async (postId, size) => {
-        const value = await this.postRepository.patchPost(postId, size);
+    postPatch = async (postId, size, style, lifeType, img, space, content, tags) => {
+        const value = await this.postRepository.patchPost(
+            postId,
+            size,
+            style,
+            lifeType,
+            img,
+            space,
+            content,
+            tags
+        );
         return value;
     };
 

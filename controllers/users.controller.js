@@ -32,9 +32,9 @@ class UsersController {
             const result = await this.userService.sendMail({
                 userEmail,
             });
-            res.set({'emailToken':`Bearer ${result.emailToken}`});
+            res.set({ emailToken: `Bearer ${result.emailToken}` });
             // res.headers('emailToken', `Bearer ${result.emailToken}`)
-            res.json({ 'emailToken':`Bearer ${result.emailToken}`,message: result.message });
+            res.json({ emailToken: `Bearer ${result.emailToken}`, message: result.message });
         } catch (err) {
             next(err);
         }

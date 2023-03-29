@@ -23,6 +23,8 @@ router.delete('/posts/:postId', authmiddleware, postscontroller.PostsDelete);
 //게시글 수정 patch /posts/:{postId}
 router.patch('/posts/:postId', authmiddleware, postscontroller.PostsPatch);
 
-router.get("/main/:lifeType", postscontroller.PostGetLifeType);
+router.get('/main/:lifeType', postscontroller.PostGetLifeType);
+
+router.get('/main/:lifeType', postscontroller.PostGetLifeType);
 
 module.exports = router;

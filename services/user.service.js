@@ -13,7 +13,6 @@ class UserService {
         console.log(randomNumber, typeof randomNumber);
         const salt = await bcrypt.genSalt();
         const encryptRandomNumber = await bcrypt.hash(randomNumber.toString(), salt);
-        console.log(encryptRandomNumber);
 
         const emailToken = jwt.sign(
             {

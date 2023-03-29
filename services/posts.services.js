@@ -4,15 +4,6 @@ const { Posts, Users, Boards, Comments ,Likes} = require('../models');
 
 class PostService {
     postRepository = new PostRepository();
-    /*
-  
-*/
-    testfindAllPost = async () => {
-        console.log('서비스 위치입니다');
-        const allPost = await this.postRepository.testfindAllPost();
-        return allPost;
-    };
-    //////////////////////////////////////////////////////////////////////////////
 
     // -img 여부 			checkImg
     checkImg = async () => {
@@ -94,6 +85,7 @@ class PostService {
         return value;
     };
 
+    //board 생성
     boardCreate = async ({ postId, img, space, content, tags }) => {
         const value = await this.postRepository.createBoard({
             postId,
@@ -105,14 +97,46 @@ class PostService {
         return value;
     };
 
-    // -게시글 전체조회 	postFindall
+
+    //찾은 값의 순서를 정렬
+    postSort = async (title,posts) =>{ 
+        switch (title) {
+            case "likesCount":
+                posts = posts.sort((a, b) => {
+                    return b.likesCount - a.likesCount;
+                });
+                break;
+
+            case "commentCount":
+                posts = posts.sort((a, b) => {
+                    return b.commentCount - a.commentCount;
+                });
+                break;
+
+            case "createAt": posts = posts.sort((a, b) => {
+                return b.createAt - a.createAt;
+            });
+            break;
+
+            default : posts = posts.sort((a, b) => {
+                return a.postId - b.postId;
+            });
+        }
+        return posts
+    };
+
+
+
+    // -게시글 전체조회
     postFindall = async () => {
         const value = await this.postRepository.findByPost();
 
+        let result = value.map((post) => {
 
-       
-        const result = value.map((post) => {
             const { Boards, User, Comments,Likes, ...rest } = post;
+
+            // let date = post.createAt;
+            // let formattedDate = date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' }).replace(',', '').replace(/\//g, '-').replace(' ', '/');
 
             return {
                 postId: post.postId,
@@ -121,6 +145,8 @@ class PostService {
                 comment: Comments.length > 0 ? Comments[0].comment : null,
                 likesCount: Likes.length,
                 commentCount: Comments.length,
+                lifeType: post.lifeType,
+                createAt : post.createdAt,
                 Boards: Boards.map((board) => ({
                     img: board.img,
                     space: board.space,
@@ -128,9 +154,12 @@ class PostService {
                 })),
             };
         });
-
         return result;
     };
+
+
+   
+
 
     // -게시글 일부조회 	postFindone
     postFindone = async (postId) => {
@@ -159,6 +188,38 @@ class PostService {
 
         return value2;
     };
+
+    //where문이 포함된 전체 내용 찾기
+    postWhereFindall = async (lifeType) => { 
+        const value = await this.postRepository.postWhereFindall(lifeType)  
+  
+        let result = value.map((post) => {
+
+            const { Boards, User, Comments,Likes, ...rest } = post;
+
+            // let date = post.createAt;
+            // let formattedDate = date.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' }).replace(',', '').replace(/\//g, '-').replace(' ', '/');
+
+            return {
+                postId: post.postId,
+                nickname: User.nickname,
+                size: post.size,
+                comment: Comments.length > 0 ? Comments[0].comment : null,
+                likesCount: Likes.length,
+                commentCount: Comments.length,
+                lifeType: post.lifeType,
+                createAt : post.createdAt,
+                Boards: Boards.map((board) => ({
+                    img: board.img,
+                    space: board.space,
+                    content: board.content,
+                })),
+            };
+        });
+        return result;
+
+    }
+
 
     // -게시글 수정		postPatch
     postPatch = async (postId, size) => {

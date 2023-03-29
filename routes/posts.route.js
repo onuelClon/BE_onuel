@@ -8,9 +8,6 @@ const authmiddleware = require('../middleware/auth-middleware');
 const postsController = require('../controllers/posts.controller.js');
 const postscontroller = new postsController();
 
-//테스트
-router.get('/test', postscontroller.Test);
-
 //게시글 작성  post  /posts
 router.post('/posts', authmiddleware, postscontroller.Posts);
 
@@ -25,5 +22,7 @@ router.delete('/posts/:postId', authmiddleware, postscontroller.PostsDelete);
 
 //게시글 수정 patch /posts/:{postId}
 router.patch('/posts/:postId', authmiddleware, postscontroller.PostsPatch);
+
+router.get("/main/:lifeType", postscontroller.PostGetLifeType);
 
 module.exports = router;

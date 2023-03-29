@@ -4,21 +4,12 @@ const express = require('express');
 //트랙젝션 사용
 const { Posts, sequelize } = require('../models');
 const { Transaction } = require('sequelize');
-
+//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제
+const { Users, Boards, Comments, Likes } = require('../models'); //나중에 삭제
+//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제
 class PostsController {
     postService = new PostService();
-    /*
-   
-
-    */
-
-    Test = async (req, res, next) => {
-        console.log('컨트롤러 위치입니다');
-        const posts = await this.postService.testfindAllPost();
-        res.status(200).json({ data: posts });
-    };
-    //////////////////////////////////////////////////////////////////////////////
-
+ 
     //게시물 생성
     Posts = async (req, res, next) => {
         try {
@@ -28,7 +19,6 @@ class PostsController {
             console.log(boards[1].content);
             console.log(boards.length);
 
-            
             //게시물생성
             const posts = await this.postService.postCreate({
                 userId,
@@ -45,13 +35,13 @@ class PostsController {
             for (let i = 0; i < boards.length; i++) {
                 TotalBoards[i] = await this.postService.boardCreate({
                     postId,
-                    img :boards[i].img,
-                    space : boards[i].space,
-                    content :boards[i].content,
-                    tags : boards[i].tags,
-                }); 
+                    img: boards[i].img,
+                    space: boards[i].space,
+                    content: boards[i].content,
+                    tags: boards[i].tags,
+                });
             }
-            res.status(201).json({ "message": "계시글 작성 성공하였습니다."});
+            res.status(201).json({ message: '계시글 작성 성공하였습니다.' });
             /*
             const tagsArr = await this.postService.checkTag({tags});
 
@@ -95,11 +85,18 @@ class PostsController {
         }
     };
 
-
     //★메인 게시믈 전체조회
     Main = async (req, res, next) => {
         try {
-            const posts = await this.postService.postFindall();
+            //?값 title = 값 사용
+            const {title} = req.query;
+
+            //전체 조회, 출력
+            let posts = await this.postService.postFindall();
+
+            //순서 정렬
+            posts = await this.postService.postSort(title,posts);
+
             res.status(200).json({ posts: posts });
         } catch (err) {
             next(err);
@@ -159,6 +156,22 @@ class PostsController {
         } catch (err) {
             next(err);
         }
+    };
+
+    PostGetLifeType = async (req, res, next) => {
+       
+        let {lifeType} = req.params;
+
+         //?값 title = 값 사용
+         const {title} = req.query;
+
+         //전체 조회, 출력
+         let posts = await this.postService.postWhereFindall(lifeType);
+
+         //순서 정렬
+         posts = await this.postService.postSort(title,posts);
+
+        res.send(posts);
     };
 
     //     -입력한 값 여부 확인

@@ -147,7 +147,7 @@ class PostService {
                 commentCount: Comments.length,
                 lifeType: post.lifeType,
                 createAt : post.createdAt,
-                Boards: Boards.map((board) => ({
+                boards: Boards.map((board) => ({
                     img: board.img,
                     space: board.space,
                     content: board.content,
@@ -179,7 +179,7 @@ class PostService {
             likesCount: value.Likes.length,
             commentCount: value.Comments.length,
             viewCount: viewCount,
-            Boards: value.Boards.map((board) => ({
+            boards: value.Boards.map((board) => ({
                 img: board.img,
                 space: board.space,
                 content: board.content,
@@ -209,7 +209,7 @@ class PostService {
                 commentCount: Comments.length,
                 lifeType: post.lifeType,
                 createAt : post.createdAt,
-                Boards: Boards.map((board) => ({
+                boards: Boards.map((board) => ({
                     img: board.img,
                     space: board.space,
                     content: board.content,
@@ -222,8 +222,8 @@ class PostService {
 
 
     // -게시글 수정		postPatch
-    postPatch = async (postId, size) => {
-        const value = await this.postRepository.patchPost(postId, size);
+    postPatch = async (postId, size, style, lifeType, img, space, content, tags ) => {
+        const value = await this.postRepository.patchPost(postId, size, style, lifeType, img, space, content, tags );
         return value;
     };
 

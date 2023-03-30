@@ -8,12 +8,17 @@ class UserService {
     constructor() {
         this.userRepository = new UsersRepository();
     }
+
+    // 인증번호 전송
     sendMail = async ({ userEmail }) => {
         const randomNumber = Math.floor(Math.random() * 999999);
         console.log(randomNumber, typeof randomNumber);
+        const salt = await bcrypt.genSalt();
+        const encryptRandomNumber = await bcrypt.hash(randomNumber.toString(), salt);
+
         const emailToken = jwt.sign(
             {
-                randomNumber: randomNumber.toString(),
+                randomNumber: encryptRandomNumber,
             },
             process.env.EMAIL_JWT_KEY,
             {
@@ -57,15 +62,17 @@ class UserService {
         transporter.sendMail(mailOption, (error, info) => {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('===================send ok========================' + info.response);
+                throw new CustomError('이메일 발송중 예상하지 못한 에러가 발생하였습니다.',400)
             }
+            console.log('======send ok======' + info.response);
+            
             return;
         });
 
         return { emailToken, message: '입력한 이메일로 인증메일이 발송되었습니다.' };
     };
 
+    // 인증번호 확인
     emailCheck = async ({ emailtoken, emailNum }) => {
         try {
             console.log('토큰', emailtoken, emailNum, typeof emailNum);
@@ -76,8 +83,12 @@ class UserService {
             }
             const { randomNumber } = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
             console.log(randomNumber);
+
+            // 암호화된 인증번호 비교
+            const checkNumber = await bcrypt.compare(emailNum, randomNumber);
+
             const validateInfo = jwt.verify(authToken, process.env.EMAIL_JWT_KEY);
-            if (validateInfo.randomNumber !== emailNum) {
+            if (!checkNumber) {
                 throw new CustomError('인증코드가 일치하지 않습니다.', 419);
             }
             console.log(validateInfo);
@@ -88,6 +99,7 @@ class UserService {
         return { message: '이메일 인증에 성공하였습니다' };
     };
 
+    // 로그인
     loginUser = async ({ userEmail, password }) => {
         const existUser = await this.userRepository.findUserById({ userEmail });
         console.log(existUser);
@@ -105,6 +117,7 @@ class UserService {
         return { token, message: '로그인을 성공하였습니다.' };
     };
 
+    // 회원가입
     signupUser = async ({ userEmail, nickname, password, confirm }) => {
         let validEmailCheck =
             /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;

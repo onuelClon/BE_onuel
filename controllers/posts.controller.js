@@ -80,7 +80,6 @@ class PostsController {
         try {
             const { postId } = req.params;
             const { size, style, lifeType, img, space, content, tags } = req.body;
-
             //postid존재여부
             await this.postService.findByPostId(postId);
             //tag형식확인
@@ -149,7 +148,6 @@ class PostsController {
     // -게시글 삭제  	postDestroy
     // -게시글 생성		postCreate
     // -게시글 수정		postPatch
-
 
     //트랙젝션 사용 - 사용을 하지 않게 됨
     // const { Posts, sequelize } = require('../models');

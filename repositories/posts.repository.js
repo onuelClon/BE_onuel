@@ -3,7 +3,6 @@ const { Posts, Users, Boards, Comments, Likes } = require('../models');
 class PostRepository {
     //post제작
     createPost = async ({ userId, nickname, size, style, lifeType }) => {
-        console.log(nickname);
         const makePost = await Posts.create({
             userId,
             nickname,
@@ -57,12 +56,12 @@ class PostRepository {
 
     //게시글 일부조회
     findByPostId = async (postId) => {
-        let findOne = await Posts.findOne({
+        const findOne = await Posts.findOne({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount'],
             include: [
                 {
                     model: Boards,
-                    attributes: ['img', 'space', 'content','tags'],
+                    attributes: ['img', 'space', 'content', 'tags'],
                 },
                 {
                     model: Users,
@@ -87,7 +86,7 @@ class PostRepository {
 
     //where문을 사용한 일부조회
     postWhereFindall = async (lifeType) => {
-        let findAll = await Posts.findAll({
+        const findAll = await Posts.findAll({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount', 'createdAt'],
             include: [
                 {
@@ -113,13 +112,14 @@ class PostRepository {
         return findAll;
     };
 
+    //게시물 삭제
     deletePost = async (postId) => {
         const deletePost = await Posts.destroy({ where: { postId } });
         return deletePost;
     };
 
+    //게시물수정
     patchPost = async (postId, size, style, lifeType, img, space, content, tags) => {
-        console.log('레파지토리');
         const postpatch = await Posts.update(
             {
                 size,

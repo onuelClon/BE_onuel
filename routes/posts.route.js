@@ -14,8 +14,8 @@ router.post('/posts', authmiddleware, postscontroller.Posts);
 //게시판 전체 조회 get /main
 router.get('/main', postscontroller.Main);
 
-//게시글 상세조회 get  /posts/:{postId} 
-router.get("/posts/:postId",  postscontroller.PostsGet);
+//게시글 상세조회 get  /posts/:{postId}
+router.get('/posts/:postId', postscontroller.PostsGet);
 
 //게시글 삭제   delete /posts/:{postId}
 router.delete('/posts/:postId', authmiddleware, postscontroller.PostsDelete);

@@ -8,6 +8,8 @@ class UserService {
     constructor() {
         this.userRepository = new UsersRepository();
     }
+
+    // 인증번호 전송
     sendMail = async ({ userEmail }) => {
         const randomNumber = Math.floor(Math.random() * 999999);
         console.log(randomNumber, typeof randomNumber);
@@ -61,7 +63,7 @@ class UserService {
             if (error) {
                 console.log(error);
             } else {
-                console.log('===================send ok========================' + info.response);
+                console.log('======send ok======' + info.response);
             }
             return;
         });
@@ -69,6 +71,7 @@ class UserService {
         return { emailToken, message: '입력한 이메일로 인증메일이 발송되었습니다.' };
     };
 
+    // 인증번호 확인
     emailCheck = async ({ emailtoken, emailNum }) => {
         try {
             console.log('토큰', emailtoken, emailNum, typeof emailNum);
@@ -95,6 +98,7 @@ class UserService {
         return { message: '이메일 인증에 성공하였습니다' };
     };
 
+    // 로그인
     loginUser = async ({ userEmail, password }) => {
         const existUser = await this.userRepository.findUserById({ userEmail });
         console.log(existUser);
@@ -112,6 +116,7 @@ class UserService {
         return { token, message: '로그인을 성공하였습니다.' };
     };
 
+    // 회원가입
     signupUser = async ({ userEmail, nickname, password, confirm }) => {
         let validEmailCheck =
             /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;

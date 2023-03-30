@@ -22,17 +22,6 @@ class LikesController {
             });
         }
     }
-
-    // getMyLikedPosts = async (req, res, next) => {
-    //     try {
-    //         const { userId } = res.locals.user;
-    //         const posts = await this.likeService.getMyLikedPosts(userId)
-
-    //         res.status(200).json({posts: posts})
-    //     } catch (error) {
-    //         next(error)
-    //     }
-    // }
 }
 
 module.exports = LikesController;

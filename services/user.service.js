@@ -62,9 +62,10 @@ class UserService {
         transporter.sendMail(mailOption, (error, info) => {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('======send ok======' + info.response);
+                throw new CustomError('이메일 발송중 예상하지 못한 에러가 발생하였습니다.',400)
             }
+            console.log('======send ok======' + info.response);
+            
             return;
         });
 

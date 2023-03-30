@@ -62,7 +62,7 @@ class PostService {
         const value = await this.postRepository.findByPost();
 
         let result = value.map((post) => {
-            const { Boards, User, Comments, Likes} = post;
+            const { Boards, User, Comments, Likes } = post;
 
             return {
                 postId: post.postId,
@@ -84,17 +84,14 @@ class PostService {
         return result;
     };
 
-
-     //postId존재 여부
-     findByPostId = async (postId) => {
+    //postId존재 여부
+    findByPostId = async (postId) => {
         const value = await this.postRepository.findByPostId(postId);
 
         if (!value) {
             throw new Error('post가 존재하지 않습니다', 400);
         }
-
     };
-
 
     //게시글 일부조회
     postFindone = async (postId,userId) => {

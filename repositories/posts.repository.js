@@ -1,10 +1,8 @@
-const { Posts, Users, Boards, Comments,Likes } = require('../models');
+const { Posts, Users, Boards, Comments, Likes } = require('../models');
 
 class PostRepository {
-    
     //post제작
     createPost = async ({ userId, nickname, size, style, lifeType }) => {
-      
         const makePost = await Posts.create({
             userId,
             nickname,
@@ -28,19 +26,18 @@ class PostRepository {
 
         return makeBoards;
     };
-    
+
     //게시물 전체 조회
     findByPost = async () => {
-
         const findAll = await Posts.findAll({
-            attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount','createdAt'],
+            attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount', 'createdAt'],
             include: [
                 {
-                    model: Boards, 
+                    model: Boards,
                     attributes: ['img', 'space', 'content'],
                 },
                 {
-                    model: Users, 
+                    model: Users,
                     attributes: ['nickname'],
                 },
                 {
@@ -59,16 +56,15 @@ class PostRepository {
 
     //게시글 일부조회
     findByPostId = async (postId) => {
-
         const findOne = await Posts.findOne({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount'],
             include: [
                 {
                     model: Boards,
-                    attributes: ['img', 'space', 'content','tags'],
+                    attributes: ['img', 'space', 'content', 'tags'],
                 },
                 {
-                    model: Users, 
+                    model: Users,
                     attributes: ['nickname'],
                 },
                 {
@@ -83,14 +79,13 @@ class PostRepository {
             where: {
                 postId: postId,
             },
-        }); 
+        });
 
         return findOne;
     };
 
     //where문을 사용한 일부조회
-    postWhereFindall  = async (lifeType) => { 
-       
+    postWhereFindall = async (lifeType) => {
         const findAll = await Posts.findAll({
             attributes: ['postId', 'userId', 'size', 'style', 'lifeType', 'viewCount', 'createdAt'],
             include: [
@@ -99,7 +94,7 @@ class PostRepository {
                     attributes: ['img', 'space', 'content'],
                 },
                 {
-                    model: Users, 
+                    model: Users,
                     attributes: ['nickname'],
                 },
                 {
@@ -114,8 +109,8 @@ class PostRepository {
             where: { lifeType },
         });
 
-        return findAll
-    }
+        return findAll;
+    };
 
     //게시물 삭제
     deletePost = async (postId) => {
@@ -124,10 +119,16 @@ class PostRepository {
     };
 
     //게시물수정
-    patchPost = async (postId,size, style, lifeType, img, space, content, tags ) => {
+    patchPost = async (postId, size, style, lifeType, img, space, content, tags) => {
         const postpatch = await Posts.update(
             {
-                size,style, lifeType, img, space, content, tags
+                size,
+                style,
+                lifeType,
+                img,
+                space,
+                content,
+                tags,
             },
             {
                 where: { postId },

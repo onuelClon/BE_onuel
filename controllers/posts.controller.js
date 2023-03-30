@@ -1,21 +1,15 @@
 const PostService = require('../services/posts.services');
 const express = require('express');
 
-//트랙젝션 사용
-const { Posts, sequelize } = require('../models');
-const { Transaction } = require('sequelize');
-//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제
-const { Users, Boards, Comments, Likes } = require('../models'); //나중에 삭제
-//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제//나중에 삭제
 class PostsController {
     postService = new PostService();
- 
+
     //게시물 생성
     Posts = async (req, res, next) => {
         try {
             const { userId, nickname } = res.locals.user;
             const { size, style, lifeType, boards } = req.body;
-       
+
             //게시물생성
             const posts = await this.postService.postCreate({
                 userId,
@@ -51,13 +45,13 @@ class PostsController {
     Main = async (req, res, next) => {
         try {
             //?값 title = 값 사용
-            const {title} = req.query;
+            const { title } = req.query;
 
             //전체 조회, 출력
             let posts = await this.postService.postFindall();
 
             //순서 정렬
-            posts = await this.postService.postSort(title,posts);
+            posts = await this.postService.postSort(title, posts);
 
             res.status(200).json({ posts: posts });
         } catch (err) {
@@ -85,18 +79,25 @@ class PostsController {
     PostsPatch = async (req, res, next) => {
         try {
             const { postId } = req.params;
-            const { size, style, lifeType, img, space, content, tags  } = req.body;
+            const { size, style, lifeType, img, space, content, tags } = req.body;
+
             //postid존재여부
             await this.postService.findByPostId(postId);
-            //입력값 확인
-            //img 확인
             //tag형식확인
 
-            // await checkTotal(size, style, lifeType);
             //게시물 수정
-            await this.postService.postPatch(postId, size, style, lifeType, img, space, content, tags );
+            await this.postService.postPatch(
+                postId,
+                size,
+                style,
+                lifeType,
+                img,
+                space,
+                content,
+                tags
+            );
 
-            res.status(201).json({ message: '게시글 수정을 완료하였습니다' });
+            res.status(200).json({ message: '게시글을 수정하였습니다' });
         } catch (err) {
             next(err);
         }
@@ -110,7 +111,6 @@ class PostsController {
             //postid존재여부
             await this.postService.findByPostId(postId);
 
-            // await this.postService.checkPostId(postId);
             //게시물 삭제
             await this.postService.postDestroy(postId);
             res.status(200).json({ message: '게시글을 삭제하였습니다' });
@@ -120,25 +120,28 @@ class PostsController {
     };
 
     PostGetLifeType = async (req, res, next) => {
-       
-        let {lifeType} = req.params;
+        try {
+            let { lifeType } = req.params;
 
-         //?값 title = 값 사용
-         const {title} = req.query;
+            //?값 title = 값 사용
+            const { title } = req.query;
 
-         //전체 조회, 출력
-         let posts = await this.postService.postWhereFindall(lifeType);
+            //전체 조회, 출력
+            let posts = await this.postService.postWhereFindall(lifeType);
 
-         //순서 정렬
-         posts = await this.postService.postSort(title,posts);
+            //순서 정렬
+            posts = await this.postService.postSort(title, posts);
 
-        res.send(posts);
+            res.send(posts);
+        } catch (err) {
+            next(err);
+        }
     };
 
-    //     -입력한 값 여부 확인
+    //  입력한 값 여부 확인
     // -img 여부 			checkImg
     // -tag를 형식			checkTag
-    // -postId존재 여부 		findByPostId => await this.postService.findByPostId(postId);
+    // -postId존재 여부 		findByPostId
     // -입력한 값 여부 확인 	checkInput
 
     // -게시글 전체조회 	postFindall
@@ -146,5 +149,10 @@ class PostsController {
     // -게시글 삭제  	postDestroy
     // -게시글 생성		postCreate
     // -게시글 수정		postPatch
+
+
+    //트랙젝션 사용 - 사용을 하지 않게 됨
+    // const { Posts, sequelize } = require('../models');
+    // const { Transaction } = require('sequelize');
 }
 module.exports = PostsController;

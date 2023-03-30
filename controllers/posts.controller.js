@@ -68,7 +68,7 @@ class PostsController {
 
             //postid존재여부
             await this.postService.findByPostId(postId);
-
+            
             //게시물 상세조회
             const post = await this.postService.postFindone(postId,userId);
             res.status(200).json({ post });

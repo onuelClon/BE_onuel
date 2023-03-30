@@ -97,7 +97,7 @@ class PostService {
 
 
     //게시글 일부조회
-    postFindone = async (postId) => {
+    postFindone = async (postId,userId) => {
         const value = await this.postRepository.findByPostId(postId);
 
         //일부조회를 호출할때마다 조회수 증가
@@ -105,7 +105,14 @@ class PostService {
         viewCount++;
         value.update({ viewCount });
 
+        //수정권한 가능 여부
+        let enble = false;
+        if(userId == value.userId) { 
+            enble = true;
+        }
+
         const result = {
+            enble,
             postId: value.postId,
             nickname: value.User.nickname,
             size: value.size,

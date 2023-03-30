@@ -3,6 +3,8 @@ const router = express.Router();
 
 //id확인용 미들웨어
 const authmiddleware = require("../middleware/auth-middleware");
+//본인 확인용 
+const middleware = require("../middleware/middleware");
 
 //컨트롤러로 자료
 const postsController = require('../controllers/posts.controller.js');
@@ -15,7 +17,7 @@ router.post("/posts", authmiddleware, postscontroller.Posts);
 router.get("/main", postscontroller.Main);
 
 //게시글 상세조회 get  /posts/:{postId} 
-router.get("/posts/:postId",  postscontroller.PostsGet);
+router.get("/posts/:postId", middleware, postscontroller.PostsGet);
 
 //게시글 삭제   delete /posts/:{postId} 
 router.delete("/posts/:postId", authmiddleware, postscontroller.PostsDelete);

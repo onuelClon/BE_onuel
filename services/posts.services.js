@@ -43,15 +43,9 @@ class PostService {
                 });
                 break;
 
-            case 'createAt':
-                posts = posts.sort((a, b) => {
-                    return b.createAt - a.createAt;
-                });
-                break;
-
             default:
                 posts = posts.sort((a, b) => {
-                    return a.postId - b.postId;
+                    return b.createAt - a.createAt;
                 });
         }
         return posts;

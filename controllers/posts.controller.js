@@ -62,13 +62,15 @@ class PostsController {
     //게시물 상세조회
     PostsGet = async (req, res, next) => {
         try {
+            //게시물 수정 권한 여부를 확인 위해 userId를 가져온다
+            const { userId} = res.locals.user;   
             const { postId } = req.params;
 
             //postid존재여부
             await this.postService.findByPostId(postId);
 
             //게시물 상세조회
-            const post = await this.postService.postFindone(postId);
+            const post = await this.postService.postFindone(postId,userId);
             res.status(200).json({ post });
         } catch (err) {
             next(err);

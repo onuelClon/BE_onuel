@@ -1,6 +1,4 @@
-const { Posts, Likes, Users, sequelize } = require('../models');
-// const { Op } = require('sequelize');
-// const { parseModelToFlatObject } = require('../helpers/sequelize.helpers'); 
+const { Posts, Likes } = require('../models');
 
 class LikeRepository {
     findPostByPk = async (postId) => {
